@@ -10,7 +10,6 @@ public class WebService
     private record UserData(String userId, int age, int heightInCm) {}
     private static CompletableFuture<String> getUserId()
     {
-        sleep(100);
         return CompletableFuture.supplyAsync(() -> {
             sleep(100);
             return "ladeoye";
