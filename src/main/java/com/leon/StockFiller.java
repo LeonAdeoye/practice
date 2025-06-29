@@ -21,7 +21,7 @@ public class StockFiller {
             }
         }
 
-        System.out.print(builder);
+        System.out.println(builder);
 
         List<Integer> stocks = IntStream.range(0, currentStocks.length)
                 .filter(index -> currentStocks[index] < minimumStocks[index])

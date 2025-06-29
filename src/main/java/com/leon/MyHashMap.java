@@ -1,7 +1,7 @@
 package com.leon;
 
 import java.util.LinkedList;
-public class MyHashMap {
+public class MyHashMap<T,R> {
     private static final int SIZE = 16; // Number of buckets
     private LinkedList<Entry>[] buckets;
 
@@ -12,21 +12,21 @@ public class MyHashMap {
         }
     }
 
-    private static class Entry {
-        String key;
-        Integer value;
+    private class Entry {
+        T key;
+        R value;
 
-        Entry(String key, Integer value) {
+        Entry(T key, R value) {
             this.key = key;
             this.value = value;
         }
     }
 
-    private int hash(String key) {
+    private int hash(T key) {
         return Math.abs(key.hashCode() % SIZE);
     }
 
-    public void put(String key, Integer value) {
+    public void put(T key, R value) {
         int index = hash(key);
         for (Entry entry : buckets[index]) {
             if (entry.key.equals(key)) {
@@ -37,7 +37,7 @@ public class MyHashMap {
         buckets[index].add(new Entry(key, value)); // New entry
     }
 
-    public Integer get(String key) {
+    public R get(T key) {
         int index = hash(key);
         for (Entry entry : buckets[index]) {
             if (entry.key.equals(key)) {
@@ -47,17 +47,17 @@ public class MyHashMap {
         return null; // Not found
     }
 
-    public boolean containsKey(String key) {
+    public boolean containsKey(T key) {
         return get(key) != null;
     }
 
-    public void remove(String key) {
+    public void remove(T key) {
         int index = hash(key);
         buckets[index].removeIf(entry -> entry.key.equals(key));
     }
 
     public static void main(String[] args) {
-        MyHashMap map = new MyHashMap();
+        MyHashMap<String, Integer> map = new MyHashMap();
         map.put("apple", 10);
         map.put("banana", 20);
         map.put("apple", 15); // Updates the value

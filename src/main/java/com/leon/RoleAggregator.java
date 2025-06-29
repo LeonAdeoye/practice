@@ -16,3 +16,18 @@ public class RoleAggregator {
         userRoles.forEach((key, val) -> System.out.println(key + ":  " + val));
     }
 }
+
+// What do I look at when I do code reviews:
+// SOLID principles
+// Unit testing
+// Language philosophy
+// Cyclomatic complexity
+// Design patterns
+// Data structures
+// Time complexity
+// Maintainability of code
+// Garbage collection
+// readability
+// Defensive coding techniques
+
+
