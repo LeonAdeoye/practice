@@ -13,8 +13,8 @@ public class OrderQueue
 
     public static void main(String[] args) {
         Comparator<Order> orderComparator = Comparator
-                .comparing(Order::timestamp)
-                .thenComparing(Order::price);
+                .comparing(Order::price)
+                .thenComparing(Order::timestamp).reversed();
 
         PriorityQueue<Order> queue = new PriorityQueue<>(orderComparator);
 

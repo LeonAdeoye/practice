@@ -9,6 +9,17 @@ class Order {
     int quantity;
     long timestamp;
 
+    public int getPrice()
+    {
+        return price;
+    }
+
+    public long getTimestamp()
+    {
+        return timestamp;
+    }
+
+
     public Order(Type type, int price, int quantity, long timestamp) {
         this.type = type;
         this.price = price;
@@ -24,13 +35,19 @@ class Order {
 
 class OrderBook {
 
-    private PriorityQueue<Order> buyOrders = new PriorityQueue<>(
-            (a, b) -> a.price != b.price ? Integer.compare(b.price, a.price) : Long.compare(a.timestamp, b.timestamp)
-    );
+    // In a buy order book, you usually want higher-priced orders to have higher priority—since buyers who are willing to pay more should get filled first.
+    // For buy orders, we use .reversed() on the price comparator. This turns the ascending price comparison (lowest to highest) into descending order (highest to lowest), which aligns with how a buy-side priority queue should work.
+    Comparator<Order> buyOrderComparator = Comparator
+            .comparingInt(Order::getPrice).reversed()
+            .thenComparingLong(Order::getTimestamp);
+    // By contrast, sell orders, the lowest price is the most attractive to buyers, so the natural ascending order (without reversed()) works just fine.
+    Comparator<Order> sellOrderComparator = Comparator
+            .comparingInt(Order::getPrice)
+            .thenComparingLong(Order::getTimestamp);
 
-    private PriorityQueue<Order> sellOrders = new PriorityQueue<>(
-            (a, b) -> a.price != b.price ? Integer.compare(a.price, b.price) : Long.compare(a.timestamp, b.timestamp)
-    );
+    private PriorityQueue<Order> buyOrders = new PriorityQueue<>(buyOrderComparator);
+
+    private PriorityQueue<Order> sellOrders = new PriorityQueue<>(sellOrderComparator);
 
     public void placeOrder(Order order) {
         if (order.type == Order.Type.BUY) {
@@ -41,28 +58,21 @@ class OrderBook {
     }
 
     private void matchOrder(Order incoming, PriorityQueue<Order> oppositeQueue, PriorityQueue<Order> sameQueue, boolean isBuy) {
-        while (!oppositeQueue.isEmpty() && incoming.quantity > 0) {
-            Order bestMatch = oppositeQueue.peek();
-            boolean canTrade = isBuy ? incoming.price >= bestMatch.price : incoming.price <= bestMatch.price;
-
-            if (canTrade) {
-                int tradeQty = Math.min(incoming.quantity, bestMatch.quantity);
-                System.out.println("Trade executed: " + tradeQty + " @ " + bestMatch.price);
-
+        while(!oppositeQueue.isEmpty() && incoming.quantity > 0)
+        {
+            Order match = oppositeQueue.peek();
+            boolean canTrade = isBuy ? incoming.price >= match.price : incoming.price <= match.price;
+            if(canTrade)
+            {
+                int tradeQty = Math.min(incoming.quantity, match.quantity);
                 incoming.quantity -= tradeQty;
-                bestMatch.quantity -= tradeQty;
-
-                if (bestMatch.quantity == 0) {
-                    oppositeQueue.poll();
-                }
-            } else {
-                break;
+                match.quantity -= tradeQty;
             }
+            else
+                break;
         }
-
-        if (incoming.quantity > 0) {
+        if(incoming.quantity > 0)
             sameQueue.add(incoming);
-        }
     }
 
     public void printOrderBook() {
