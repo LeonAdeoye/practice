@@ -1,15 +1,18 @@
 package com.leon;
 
+import java.util.List;
 import java.util.LinkedList;
-public class MyHashMap<T,R> {
-    private static final int SIZE = 16; // Number of buckets
+
+public class MyHashMap<T,R>
+{
+    private static final int SIZE = 16;
+
     private LinkedList<Entry>[] buckets;
 
     public MyHashMap() {
         buckets = new LinkedList[SIZE];
-        for (int i = 0; i < SIZE; i++) {
+        for(int i = 0; i < SIZE; i++)
             buckets[i] = new LinkedList<>();
-        }
     }
 
     private class Entry {
@@ -22,38 +25,40 @@ public class MyHashMap<T,R> {
         }
     }
 
-    private int hash(T key) {
-        return Math.abs(key.hashCode() % SIZE);
+    private int hash(T key)
+    {
+        return Math.abs(key.hashCode()) % SIZE;
     }
 
     public void put(T key, R value) {
         int index = hash(key);
         for (Entry entry : buckets[index]) {
             if (entry.key.equals(key)) {
-                entry.value = value; // Update existing key
+                entry.value = value;
                 return;
             }
         }
-        buckets[index].add(new Entry(key, value)); // New entry
+        buckets[index].add(new Entry(key, value));
     }
 
     public R get(T key) {
         int index = hash(key);
-        for (Entry entry : buckets[index]) {
-            if (entry.key.equals(key)) {
+        for (Entry entry : buckets[index])
+        {
+            if (entry.key.equals(key))
                 return entry.value;
-            }
         }
-        return null; // Not found
+        return null;
     }
 
     public boolean containsKey(T key) {
         return get(key) != null;
     }
 
-    public void remove(T key) {
+    public void remove(T key)
+    {
         int index = hash(key);
-        buckets[index].removeIf(entry -> entry.key.equals(key));
+        buckets[index].removeIf(ent -> ent.key.equals(key));
     }
 
     public static void main(String[] args) {

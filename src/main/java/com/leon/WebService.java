@@ -12,7 +12,7 @@ public class WebService
     {
         return CompletableFuture.supplyAsync(() -> {
             sleep(100);
-            return "ladeoye";
+            return "horatio";
         });
     }
     private static CompletableFuture<UserData> getUserData(String userId)

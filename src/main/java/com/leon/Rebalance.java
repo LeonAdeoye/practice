@@ -20,18 +20,19 @@ public class Rebalance {
         allocations.put("8604.T", 100);
         allocations.put("8602.T", 100);
 
-        for(Map.Entry<String, Integer> entry : allocations.entrySet())
+        allocations.forEach((allocation_symbol, allocation_quantity) ->
         {
-            if(holdings.containsKey(entry.getKey()))
+            if(holdings.containsKey(allocation_symbol))
             {
-                int rebalance = entry.getValue() - holdings.get(entry.getKey());
+                int rebalance = allocation_quantity - holdings.get(allocation_symbol);
+
                 if(rebalance > 0)
-                    System.out.println("Buy " + rebalance + " of stock: " + entry.getKey());
+                    System.out.println("Buy " + rebalance + " of stock: " + allocation_symbol);
                 else if(rebalance < 0)
-                    System.out.println("Sell " + Math.abs(rebalance) + " of stock: " + entry.getKey());
+                    System.out.println("Sell " + Math.abs(rebalance) + " of stock: " + allocation_symbol);
             }
             else
-                System.out.println("Buy " + entry.getValue() + " of stock: " + entry.getKey());
-        }
+                System.out.println("Buy " + allocation_quantity + " of stock: " + allocation_symbol);
+        });
     }
 }
