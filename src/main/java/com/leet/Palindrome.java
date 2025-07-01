@@ -20,22 +20,17 @@ public class Palindrome {
     }
 
     public static boolean isPalindromeNumber(int x) {
-        if (x < 0) return false;
+        if(x < 0)
+            return false;
 
-        String str = Integer.toString(x);
         Stack<Character> stack = new Stack<>();
+        String number = Integer.toString(x);
+        for(int i = 0; i < number.length(); i++)
+            stack.push(number.charAt(i));
 
-        // Push all characters onto the stack
-        for (int i = 0; i < str.length(); i++) {
-            stack.push(str.charAt(i));
-        }
-
-        // Compare characters popped from stack with the original string
-        for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) != stack.pop()) {
+        for(int i = 0; i < number.length(); i++)
+            if(number.charAt(i) != stack.pop())
                 return false;
-            }
-        }
 
         return true;
     }
